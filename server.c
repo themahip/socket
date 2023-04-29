@@ -51,13 +51,20 @@ int main(int argc, char *argv[])
 
     while (1)
     {
-        bzero(buffer, 256);
+        memset(buffer, 0, sizeof(buffer));
+
         n = read(newsockfd, buffer, 255);
         if (n < 0)
             error("Error on reading");
 
         printf("Client:%s\n", buffer);
-        bzero(buffer, 255);
+
+        if (strlen(buffer) >= 254)
+        {
+            fprintf(stderr, "Message too long\n");
+            continue;
+        }
+
         fgets(buffer, 255, stdin);
 
         n = write(newsockfd, buffer, strlen(buffer));
