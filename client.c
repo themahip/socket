@@ -46,17 +46,18 @@ int main(int argc, char *argv[])
 
     while (1)
     {
-        bzero(buffer, 255);
+        bzero(buffer, 256);
         fgets(buffer, 255, stdin);
+        buffer[strcspn(buffer, "\n")] = '\0'; // remove newline character
         n = write(sockfd, buffer, strlen(buffer));
         if (n < 0)
             error("Error on writing");
 
-        bzero(buffer, 255);
+        bzero(buffer, 256);
         n = read(sockfd, buffer, 255);
         if (n < 0)
             error("Eroror on reading.");
-        printf("Server: %s", buffer);
+        printf("Server: %s\n", buffer);
         int i = strncmp("Bye", buffer, 3);
         if (i == 0)
             break;
